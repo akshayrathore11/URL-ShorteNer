@@ -16,6 +16,7 @@ import useFetch from "@/hooks/use-fetch";
 import { login } from "@/db/apiAuth";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { UrlState } from "@/context";
+import { Input } from "./ui/input";
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -81,8 +82,8 @@ const Login = () => {
 
         <CardContent className="space-y-4 ">
           <div className="space-y-2 ">
-            <input
-              className="w-full"
+            <Input
+             
               type="email"
               name="email"
               placeholder="Enter Email"
@@ -91,8 +92,8 @@ const Login = () => {
           </div>
           <div> {errors.email && <Error message={errors.email} />}</div>
           <div className="space-y-1">
-            <input
-              className="w-full"
+            <Input
+             
               type="password"
               name="password"
               placeholder="Enter Password"
