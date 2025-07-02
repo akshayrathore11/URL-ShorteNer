@@ -12,11 +12,16 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { LinkIcon, LogOut } from "lucide-react";
 import { UrlState } from "@/context";
+import useFetch from "@/hooks/use-fetch";
+import { logout } from "@/db/apiAuth";
+import { BarLoader } from "react-spinners";
 
 const Header = () => {
   const navigate = useNavigate();
 
-const {user,fetchUser} = UrlState();
+  const { user, fetchUser } = UrlState();
+
+  const { loading, fn: fnLogout } = useFetch(logout);
   return (
     <>
       <nav className="py-4 flex justify-between items-center">
@@ -31,13 +36,18 @@ const {user,fetchUser} = UrlState();
             <DropdownMenu>
               <DropdownMenuTrigger className="w-10 rounded-full overflow-hidden ">
                 <Avatar>
-                  <AvatarImage src={user?.user_metadata?.profilepic} className={"object-cover"}/>
+                  <AvatarImage
+                    src={user?.user_metadata?.profilepic}
+                    className={"object-cover"}
+                  />
                   <AvatarFallback>AK</AvatarFallback>
                 </Avatar>
               </DropdownMenuTrigger>
 
               <DropdownMenuContent>
-                <DropdownMenuLabel>{user?.user_metadata?.name}</DropdownMenuLabel>
+                <DropdownMenuLabel>
+                  {user?.user_metadata?.name}
+                </DropdownMenuLabel>
 
                 <DropdownMenuSeparator />
 
@@ -48,17 +58,26 @@ const {user,fetchUser} = UrlState();
 
                 <DropdownMenuItem className={"text-red-400"}>
                   <LogOut className="mt-1 h-4 w-4" />
-                  <span onClick={()=>{
-                    navigate("/")
-                  }}>
-                    
-                    Logout</span>
+                  <span
+                    onClick={() => {
+                      fnLogout().then(() => {
+                        fetchUser();
+                        navigate("/");
+                      });
+                    }}
+                  >
+                    Logout
+                  </span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           )}
         </div>
+
       </nav>
+        {loading && (
+          <BarLoader className="mb-4" width={"100%"} color="#36d7b7" />
+        )}
     </>
   );
 };

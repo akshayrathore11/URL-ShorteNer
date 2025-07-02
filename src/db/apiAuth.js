@@ -1,3 +1,4 @@
+import Error from "@/components/error";
 import supabase, { supabaseUrl } from "./supabase";
 
 export async function login({ email, password }) {
@@ -41,4 +42,9 @@ export async function signup({ name, email, password, profilepic }) {
 
   if (error) throw new Error(error.message);
   return data;
+}
+
+export async function logout() {
+  const { error } = await supabase.auth.signOut();
+  if (error) throw new Error(error.message);
 }
